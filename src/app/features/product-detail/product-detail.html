@@ -1,0 +1,160 @@
+@if (product(); as item) {
+  <div class="tg-container tg-page">
+    <nav class="crumbs" aria-label="Breadcrumb">
+      <a routerLink="/">Home</a>
+      <span aria-hidden="true">/</span>
+      <a [routerLink]="['/menu', categorySlug()]">{{
+        categorySlug() === 'pizza' ? 'Pizzas' : 'Ice cream'
+      }}</a>
+      <span aria-hidden="true">/</span>
+      <span class="crumbs__current">{{ item.name }}</span>
+    </nav>
+
+    <div class="detail">
+      <div class="detail__media">
+        <img
+          [src]="item.imageUrl"
+          [alt]="item.name"
+          width="900"
+          height="900"
+          decoding="async"
+          fetchpriority="high"
+          (error)="onImageError($event)"
+        />
+      </div>
+
+      <div class="detail__info">
+        <div class="detail__chips">
+          <span class="tg-chip" [class.tg-chip--veg]="item.isVeg" [class.tg-chip--nonveg]="!item.isVeg">
+            {{ item.isVeg ? 'Veg' : 'Non-veg' }}
+          </span>
+          @if (heatLabel(item.spiceLevel); as heat) {
+            <span class="tg-chip tg-chip--warn">{{ heat }}</span>
+          }
+          @for (tag of item.tags; track tag) {
+            <span class="tg-chip">{{ tag }}</span>
+          }
+        </div>
+
+        <h1>{{ item.name }}</h1>
+
+        <div class="detail__rating">
+          <mat-icon aria-hidden="true">star</mat-icon>
+          <strong>{{ item.rating }}</strong>
+          <span class="tg-muted">· {{ item.ratingCount }} ratings</span>
+        </div>
+
+        <p class="detail__desc">{{ item.description }}</p>
+
+        @if (!item.isAvailable) {
+          <div class="detail__oos" role="status">
+            <mat-icon aria-hidden="true">error_outline</mat-icon>
+            <span>This one is off the menu today. Check back tomorrow.</span>
+          </div>
+        }
+
+        <fieldset class="opts">
+          <legend>Choose a size</legend>
+          <mat-radio-group
+            class="opts__sizes"
+            [value]="selectedSizeId()"
+            (change)="selectedSizeId.set($event.value)"
+          >
+            @for (size of sizes(); track size.id) {
+              <mat-radio-button class="opts__size" [value]="size.id">
+                <span class="opts__row">
+                  <span class="opts__size-label">{{ size.label }}</span>
+                  <span class="tg-muted opts__size-desc">{{ size.description }}</span>
+                  <span class="tg-price">{{ item.basePrice + size.priceDelta | rupees }}</span>
+                </span>
+              </mat-radio-button>
+            }
+          </mat-radio-group>
+        </fieldset>
+
+        <fieldset class="opts">
+          <legend>Add extras <span class="tg-muted">(optional)</span></legend>
+          <div class="opts__toppings">
+            @for (topping of toppings(); track topping.id) {
+              <mat-checkbox
+                class="opts__topping"
+                [checked]="isToppingSelected(topping.id)"
+                (change)="toggleTopping(topping.id, $event.checked)"
+              >
+                <span class="opts__row opts__row--split">
+                  <span>{{ topping.name }}</span>
+                  <span class="tg-muted">+{{ topping.price | rupees }}</span>
+                </span>
+              </mat-checkbox>
+            }
+          </div>
+        </fieldset>
+
+        <div class="detail__buy">
+          <div class="detail__buy-row">
+            <app-quantity-stepper
+              [quantity]="quantity()"
+              [label]="'quantity of ' + item.name"
+              (change)="quantity.set($event)"
+            />
+            <div class="detail__total">
+              <span class="tg-muted">Total</span>
+              <strong class="tg-price">{{ lineTotal() | rupees }}</strong>
+            </div>
+          </div>
+          <div class="detail__buy-actions">
+            <button
+              mat-stroked-button
+              color="primary"
+              [disabled]="!item.isAvailable"
+              (click)="addToCart()"
+            >
+              <mat-icon>add_shopping_cart</mat-icon>
+              Add to cart
+            </button>
+            <button
+              mat-flat-button
+              color="primary"
+              [disabled]="!item.isAvailable"
+              (click)="addToCart(true)"
+            >
+              Buy it now
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    @if (related().length) {
+      <section class="related">
+        <div class="tg-section-head">
+          <h2>Goes well with this</h2>
+        </div>
+        <div class="related__grid">
+          @for (other of related(); track other.id) {
+            <a class="related__item" [routerLink]="['/product', other.id]">
+              <img
+                [src]="other.imageUrl"
+                [alt]="other.name"
+                loading="lazy"
+                decoding="async"
+                width="300"
+                height="300"
+              />
+              <div>
+                <strong>{{ other.name }}</strong>
+                <span class="tg-muted">from {{ other.basePrice | rupees }}</span>
+              </div>
+            </a>
+          }
+        </div>
+      </section>
+    }
+  </div>
+} @else {
+  <div class="tg-container tg-page missing">
+    <h1>We could not find that</h1>
+    <p class="tg-muted">The item may have been taken off the menu.</p>
+    <a mat-flat-button color="primary" routerLink="/menu">Back to the menu</a>
+  </div>
+}

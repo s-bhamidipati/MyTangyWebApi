@@ -1,0 +1,284 @@
+.crumbs {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem;
+  margin-bottom: 1rem;
+  font-size: 0.84rem;
+  color: var(--tg-ink-muted);
+}
+
+.crumbs a:hover {
+  color: var(--tg-tomato);
+}
+
+.crumbs__current {
+  color: var(--tg-ink);
+  font-weight: 600;
+}
+
+.detail {
+  display: grid;
+  gap: clamp(1.25rem, 1rem + 2vw, 3rem);
+  align-items: start;
+}
+
+.detail__media img {
+  width: 100%;
+  aspect-ratio: 1;
+  object-fit: cover;
+  border-radius: var(--tg-radius-lg);
+  box-shadow: var(--tg-shadow);
+}
+
+.detail__chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-bottom: 0.75rem;
+}
+
+.detail__info h1 {
+  margin-bottom: 0.3rem;
+  font-size: clamp(1.75rem, 1.3rem + 2.2vw, 2.75rem);
+}
+
+.detail__rating {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  margin-bottom: 0.75rem;
+  font-size: 0.92rem;
+}
+
+.detail__rating mat-icon {
+  color: var(--tg-honey);
+  font-size: 19px;
+  width: 19px;
+  height: 19px;
+}
+
+.detail__desc {
+  max-width: 58ch;
+  color: var(--tg-ink-muted);
+}
+
+.detail__oos {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem;
+  margin-bottom: 1rem;
+  border-radius: var(--tg-radius-sm);
+  background: var(--tg-honey-soft);
+  color: var(--tg-warn-fg);
+  font-size: 0.88rem;
+}
+
+/* ----------------------------------------------------------- option sets */
+
+.opts {
+  margin: 0 0 1.25rem;
+  padding: 0;
+  border: 0;
+  border-top: 1px solid var(--tg-line);
+  padding-top: 1.1rem;
+}
+
+.opts legend {
+  padding: 0;
+  margin-bottom: 0.65rem;
+  font-family: var(--tg-font);
+  font-size: 0.96rem;
+  font-weight: 700;
+}
+
+.opts__sizes {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.opts__size {
+  display: block;
+  padding: 0.35rem 0.75rem 0.35rem 0.25rem;
+  border: 1px solid var(--tg-line);
+  border-radius: var(--tg-radius-sm);
+  background: var(--tg-surface);
+  transition: border-color 0.15s ease;
+}
+
+.opts__size:hover {
+  border-color: var(--tg-tomato);
+}
+
+/* Material puts the directive on the <label> itself, so stretch that element. */
+.opts__size ::ng-deep .mat-internal-form-field,
+.opts__topping ::ng-deep .mat-internal-form-field {
+  display: flex;
+  width: 100%;
+}
+
+.opts__size ::ng-deep .mat-internal-form-field-label,
+.opts__topping ::ng-deep .mat-internal-form-field-label {
+  flex: 1;
+  min-width: 0;
+}
+
+.opts__row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.15rem 0.6rem;
+  width: 100%;
+  padding-right: 0.25rem;
+}
+
+.opts__row--split {
+  flex-wrap: nowrap;
+  justify-content: space-between;
+  font-size: 0.88rem;
+}
+
+.opts__size-label {
+  font-weight: 600;
+}
+
+.opts__size-desc {
+  font-size: 0.8rem;
+  margin-right: auto;
+}
+
+.opts__toppings {
+  display: grid;
+  gap: 0.35rem;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 220px), 1fr));
+}
+
+/* ------------------------------------------------------------- buy panel */
+
+.detail__buy {
+  position: sticky;
+  bottom: 0;
+  display: grid;
+  gap: 0.75rem;
+  padding: 0.9rem;
+  border: 1px solid var(--tg-line);
+  border-radius: var(--tg-radius);
+  background: var(--tg-surface);
+  box-shadow: var(--tg-shadow);
+  z-index: 5;
+}
+
+.detail__buy-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.detail__total {
+  display: flex;
+  flex-direction: column;
+  align-items: end;
+  line-height: 1.2;
+}
+
+.detail__total span {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.detail__total strong {
+  font-size: 1.35rem;
+}
+
+.detail__buy-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5rem;
+}
+
+.detail__buy-actions button {
+  width: 100%;
+}
+
+/* ---------------------------------------------------------------- related */
+
+.related {
+  margin-top: clamp(2.5rem, 2rem + 3vw, 4rem);
+}
+
+.related__grid {
+  display: grid;
+  gap: 0.75rem;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 210px), 1fr));
+}
+
+.related__item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.5rem;
+  border: 1px solid var(--tg-line);
+  border-radius: var(--tg-radius);
+  background: var(--tg-surface);
+  transition:
+    border-color 0.15s ease,
+    transform 0.15s ease;
+}
+
+.related__item:hover {
+  border-color: var(--tg-tomato);
+  transform: translateY(-2px);
+}
+
+.related__item img {
+  width: 56px;
+  height: 56px;
+  flex: none;
+  border-radius: var(--tg-radius-sm);
+  object-fit: cover;
+}
+
+.related__item strong {
+  display: block;
+  font-size: 0.9rem;
+  line-height: 1.25;
+}
+
+.related__item span {
+  font-size: 0.78rem;
+}
+
+.missing {
+  text-align: center;
+}
+
+/* ------------------------------------------------------------ breakpoints */
+
+@media (min-width: 900px) {
+  .detail {
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+  }
+
+  .detail__media {
+    position: sticky;
+    top: calc(var(--tg-header-h) + 1.5rem);
+  }
+
+  .detail__buy {
+    position: static;
+    box-shadow: none;
+  }
+
+  .detail__buy-actions {
+    grid-template-columns: auto auto;
+    justify-content: start;
+  }
+
+  .detail__buy-actions button {
+    width: auto;
+    min-width: 160px;
+  }
+}

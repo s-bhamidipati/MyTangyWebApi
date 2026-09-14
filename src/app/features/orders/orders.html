@@ -1,0 +1,46 @@
+<div class="tg-container tg-page">
+  <header class="ord__head">
+    <div>
+      <span class="tg-eyebrow">History</span>
+      <h1>Your orders</h1>
+    </div>
+    <a mat-stroked-button routerLink="/menu">Order again</a>
+  </header>
+
+  @if (orders().length) {
+    <ul class="ord__list">
+      @for (order of orders(); track order.id) {
+        <li class="ord">
+          <div class="ord__main">
+            <div class="ord__top">
+              <strong class="ord__num">{{ order.orderNumber }}</strong>
+              <span class="pill" [class]="statusClass(order.status)">
+                {{ statusLabels[order.status] }}
+              </span>
+            </div>
+            <p class="ord__items">{{ summary(order) }}</p>
+            <p class="ord__meta tg-muted">
+              {{ order.placedAt | date: 'd MMM y, h:mm a' }} ·
+              {{ itemCount(order) }} item{{ itemCount(order) === 1 ? '' : 's' }}
+            </p>
+          </div>
+
+          <div class="ord__side">
+            <strong class="tg-price">{{ order.total | rupees }}</strong>
+            <a mat-button color="primary" [routerLink]="['/order', order.id]">
+              Details <mat-icon>chevron_right</mat-icon>
+            </a>
+          </div>
+        </li>
+      }
+    </ul>
+  } @else {
+    <app-empty-state
+      icon="receipt_long"
+      heading="No orders yet"
+      message="Once you place an order it will show up here with its live status."
+      actionLabel="Browse the menu"
+      actionLink="/menu"
+    />
+  }
+</div>

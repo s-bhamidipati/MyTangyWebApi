@@ -1,0 +1,100 @@
+<header class="hdr">
+  <div class="hdr__bar tg-container">
+    <button
+      type="button"
+      class="hdr__burger"
+      mat-icon-button
+      aria-label="Open navigation menu"
+      [attr.aria-expanded]="drawerOpen()"
+      (click)="toggleDrawer()"
+    >
+      <mat-icon>menu</mat-icon>
+    </button>
+
+    <a class="hdr__brand" routerLink="/" (click)="closeDrawer()">
+      <span class="hdr__mark" aria-hidden="true">🍕</span>
+      <span class="hdr__name">Tangy</span>
+    </a>
+
+    <nav class="hdr__nav" aria-label="Primary">
+      @for (link of links; track link.path) {
+        <a
+          class="hdr__link"
+          [routerLink]="link.path"
+          routerLinkActive="hdr__link--active"
+          [routerLinkActiveOptions]="{ exact: link.path === '/' }"
+          >{{ link.label }}</a
+        >
+      }
+    </nav>
+
+    <div class="hdr__actions">
+      <button
+        type="button"
+        mat-icon-button
+        [matMenuTriggerFor]="themeMenu"
+        [matTooltip]="theme.isDark() ? 'Dark theme' : 'Light theme'"
+        aria-label="Change colour theme"
+      >
+        <mat-icon>{{ theme.isDark() ? 'dark_mode' : 'light_mode' }}</mat-icon>
+      </button>
+      <mat-menu #themeMenu="matMenu">
+        @for (option of themeOptions; track option.value) {
+          <button
+            mat-menu-item
+            type="button"
+            (click)="theme.set(option.value)"
+            [attr.aria-current]="theme.preference() === option.value"
+          >
+            <mat-icon>{{ option.icon }}</mat-icon>
+            <span>{{ option.label }}</span>
+            @if (theme.preference() === option.value) {
+              <mat-icon class="hdr__menu-tick">check</mat-icon>
+            }
+          </button>
+        }
+      </mat-menu>
+
+      <button
+        type="button"
+        mat-icon-button
+        class="hdr__cart"
+        aria-label="Open cart"
+        (click)="goToCart()"
+      >
+        <mat-icon
+          [matBadge]="cart.count()"
+          [matBadgeHidden]="cart.count() === 0"
+          matBadgeColor="warn"
+          matBadgeSize="small"
+          >shopping_cart</mat-icon
+        >
+      </button>
+      <a mat-flat-button color="primary" class="hdr__cta" routerLink="/menu">Order now</a>
+    </div>
+  </div>
+
+  @if (drawerOpen()) {
+    <div class="hdr__scrim" (click)="closeDrawer()" aria-hidden="true"></div>
+    <nav class="hdr__drawer" aria-label="Mobile navigation">
+      <mat-nav-list>
+        @for (link of links; track link.path) {
+          <a
+            mat-list-item
+            [routerLink]="link.path"
+            routerLinkActive="hdr__drawer-link--active"
+            [routerLinkActiveOptions]="{ exact: link.path === '/' }"
+            (click)="closeDrawer()"
+          >
+            <mat-icon matListItemIcon>{{ link.icon }}</mat-icon>
+            <span matListItemTitle>{{ link.label }}</span>
+          </a>
+        }
+        <a mat-list-item routerLink="/cart" (click)="closeDrawer()">
+          <mat-icon matListItemIcon>shopping_cart</mat-icon>
+          <span matListItemTitle>Cart ({{ cart.count() }})</span>
+        </a>
+      </mat-nav-list>
+    </nav>
+  }
+</header>

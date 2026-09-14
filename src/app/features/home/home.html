@@ -1,0 +1,120 @@
+<section class="hero">
+  <div class="tg-container hero__inner">
+    <div class="hero__copy">
+      <span class="tg-eyebrow">Pizza &amp; ice cream · nothing else</span>
+      <h1>Two things.<br />Done properly.</h1>
+      <p>
+        Slow-proved sourdough bases fired in a stone oven, and ice cream churned in small batches
+        every morning. That is the entire menu, and that is the point.
+      </p>
+      <div class="hero__cta">
+        <a mat-flat-button color="primary" routerLink="/menu/pizza">
+          <mat-icon>local_pizza</mat-icon>
+          Order a pizza
+        </a>
+        <a mat-stroked-button routerLink="/menu/icecream">
+          <mat-icon>icecream</mat-icon>
+          Browse ice cream
+        </a>
+      </div>
+      <dl class="hero__stats">
+        <div><dt>4.8★</dt><dd>12k+ ratings</dd></div>
+        <div><dt>30 min</dt><dd>Average delivery</dd></div>
+        <div><dt>20</dt><dd>Things on the menu</dd></div>
+      </dl>
+    </div>
+
+    <div class="hero__art">
+      <img
+        [src]="categories()[0]?.heroImageUrl"
+        alt="A freshly baked margherita pizza"
+        width="900"
+        height="900"
+        fetchpriority="high"
+        decoding="async"
+      />
+      <div class="hero__badge">
+        <mat-icon aria-hidden="true">local_fire_department</mat-icon>
+        <div>
+          <strong>Fired to order</strong>
+          <span>Never reheated</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="tg-container tg-section">
+  <div class="tg-section-head">
+    <div>
+      <span class="tg-eyebrow">Pick a side</span>
+      <h2>Savoury or sweet?</h2>
+    </div>
+  </div>
+
+  <div class="cats">
+    @for (category of categories(); track category.id) {
+      <a class="cat" [routerLink]="['/menu', category.slug]">
+        <img
+          [src]="category.heroImageUrl"
+          [alt]="category.name"
+          loading="lazy"
+          decoding="async"
+          width="800"
+          height="600"
+        />
+        <div class="cat__body">
+          <h3>{{ category.name }}</h3>
+          <p>{{ category.tagline }}</p>
+          <span class="cat__link">
+            See the range <mat-icon aria-hidden="true">arrow_forward</mat-icon>
+          </span>
+        </div>
+      </a>
+    }
+  </div>
+</section>
+
+<section class="perks">
+  <div class="tg-container perks__grid">
+    @for (perk of perks; track perk.title) {
+      <div class="perk">
+        <mat-icon aria-hidden="true">{{ perk.icon }}</mat-icon>
+        <h4>{{ perk.title }}</h4>
+        <p>{{ perk.copy }}</p>
+      </div>
+    }
+  </div>
+</section>
+
+<section class="tg-container tg-section">
+  <div class="tg-section-head">
+    <div>
+      <span class="tg-eyebrow">Most ordered</span>
+      <h2>The ones people come back for</h2>
+      <p>Hand-picked favourites from across both menus.</p>
+    </div>
+    <a mat-stroked-button routerLink="/menu">View full menu</a>
+  </div>
+
+  <div class="tg-grid">
+    @for (product of featured(); track product.id) {
+      <app-product-card [product]="product" />
+    }
+  </div>
+</section>
+
+<section class="tg-container">
+  <div class="promo">
+    <div class="promo__copy">
+      <span class="tg-eyebrow promo__eyebrow">Better together</span>
+      <h2>Any large pizza + a take-home tub</h2>
+      <p>
+        Order a large pizza and a 500 ml tub in the same basket and delivery is free — you will
+        clear the ₹699 threshold anyway.
+      </p>
+      <a mat-flat-button color="primary" routerLink="/menu">Build the combo</a>
+    </div>
+    <div class="promo__art" aria-hidden="true">🍕&nbsp;🍨</div>
+  </div>
+</section>

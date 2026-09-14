@@ -1,0 +1,206 @@
+.cart__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 1.25rem;
+}
+
+.cart__head h1 {
+  margin: 0;
+}
+
+.cart__nudge {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.75rem 1rem;
+  margin-bottom: 1.25rem;
+  border-radius: var(--tg-radius-sm);
+  background: var(--tg-basil-soft);
+  color: var(--tg-basil);
+  font-size: 0.88rem;
+}
+
+.cart__layout {
+  display: grid;
+  gap: clamp(1rem, 0.75rem + 1.5vw, 2rem);
+  align-items: start;
+}
+
+.cart__list {
+  display: grid;
+  gap: 0.75rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* ------------------------------------------------------------------ line */
+
+.line {
+  display: grid;
+  grid-template-columns: 84px minmax(0, 1fr);
+  gap: 0.85rem;
+  padding: 0.85rem;
+  background: var(--tg-surface);
+  border: 1px solid var(--tg-line);
+  border-radius: var(--tg-radius);
+}
+
+.line__img {
+  width: 84px;
+  height: 84px;
+  border-radius: var(--tg-radius-sm);
+  object-fit: cover;
+}
+
+.line__body {
+  min-width: 0;
+}
+
+.line__top {
+  display: flex;
+  align-items: start;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.line__name {
+  margin: 0;
+  font-size: 1rem;
+  line-height: 1.3;
+}
+
+.line__name a:hover {
+  color: var(--tg-tomato);
+}
+
+.line__remove {
+  flex: none;
+  margin: -0.35rem -0.35rem 0 0;
+}
+
+.line__opts {
+  margin: 0.15rem 0 0;
+  font-size: 0.83rem;
+}
+
+.line__toppings {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+  margin: 0.4rem 0 0;
+}
+
+.line__foot {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-top: 0.7rem;
+}
+
+.line__price {
+  display: flex;
+  flex-direction: column;
+  align-items: end;
+  line-height: 1.25;
+}
+
+.line__price strong {
+  font-size: 1.05rem;
+}
+
+.line__price span {
+  font-size: 0.74rem;
+}
+
+/* --------------------------------------------------------------- summary */
+
+.summary {
+  padding: 1.1rem;
+  background: var(--tg-surface);
+  border: 1px solid var(--tg-line);
+  border-radius: var(--tg-radius);
+  box-shadow: var(--tg-shadow);
+}
+
+.summary__title {
+  margin: 0 0 0.85rem;
+  font-size: 1.05rem;
+}
+
+.summary__rows {
+  display: grid;
+  gap: 0.45rem;
+  margin: 0 0 0.85rem;
+  padding-bottom: 0.85rem;
+  border-bottom: 1px dashed var(--tg-line);
+  font-size: 0.9rem;
+}
+
+.summary__rows > div {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.summary__rows dt {
+  color: var(--tg-ink-muted);
+}
+
+.summary__rows dd {
+  margin: 0;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.summary__free {
+  color: var(--tg-basil);
+  font-weight: 700;
+}
+
+.summary__total {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  font-weight: 700;
+}
+
+.summary__total strong {
+  font-size: 1.35rem;
+}
+
+.summary__cta {
+  width: 100%;
+  margin-bottom: 0.4rem;
+}
+
+/* ------------------------------------------------------------ breakpoints */
+
+@media (min-width: 560px) {
+  .line {
+    grid-template-columns: 110px minmax(0, 1fr);
+  }
+
+  .line__img {
+    width: 110px;
+    height: 110px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .cart__layout {
+    grid-template-columns: minmax(0, 1fr) 340px;
+  }
+
+  .summary {
+    position: sticky;
+    top: calc(var(--tg-header-h) + 1.5rem);
+  }
+}

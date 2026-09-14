@@ -1,0 +1,149 @@
+:host {
+  position: sticky;
+  top: 0;
+  z-index: 30;
+  display: block;
+}
+
+.hdr {
+  background: var(--tg-overlay);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--tg-line);
+}
+
+.hdr__bar {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-height: var(--tg-header-h);
+}
+
+.hdr__brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  margin-right: auto;
+  font-family: var(--tg-font-display);
+  font-size: 1.4rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.hdr__mark {
+  font-size: 1.4rem;
+  line-height: 1;
+}
+
+.hdr__name {
+  color: var(--tg-tomato);
+}
+
+.hdr__nav {
+  display: none;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.hdr__link {
+  padding: 0.5rem 0.85rem;
+  border-radius: var(--tg-radius-pill);
+  font-size: 0.92rem;
+  font-weight: 600;
+  color: var(--tg-ink-muted);
+  transition:
+    color 0.15s ease,
+    background 0.15s ease;
+}
+
+.hdr__link:hover {
+  color: var(--tg-ink);
+  background: var(--tg-surface-alt);
+}
+
+.hdr__link--active {
+  color: var(--tg-tomato);
+  background: var(--tg-tomato-soft);
+}
+
+.hdr__actions {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  margin-left: 0.25rem;
+}
+
+.hdr__cta {
+  display: none;
+}
+
+/* ----------------------------------------------------- mobile drawer */
+
+.hdr__scrim {
+  position: fixed;
+  inset: var(--tg-header-h) 0 0;
+  background: rgba(0, 0, 0, 0.5);
+  animation: fade 0.18s ease;
+}
+
+.hdr__drawer {
+  position: fixed;
+  inset: var(--tg-header-h) auto 0 0;
+  width: min(82vw, 300px);
+  background: var(--tg-surface);
+  border-right: 1px solid var(--tg-line);
+  box-shadow: var(--tg-shadow-lg);
+  overflow-y: auto;
+  animation: slide-in 0.22s ease;
+}
+
+.hdr__drawer-link--active {
+  color: var(--tg-tomato);
+  background: var(--tg-tomato-soft);
+}
+
+.hdr__menu-tick {
+  order: 1;
+  margin-left: auto;
+  color: var(--tg-tomato);
+}
+
+@keyframes fade {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes slide-in {
+  from {
+    transform: translateX(-100%);
+  }
+}
+
+/* ----------------------------------------------------- breakpoints */
+
+@media (min-width: 768px) {
+  .hdr__burger,
+  .hdr__scrim,
+  .hdr__drawer {
+    display: none;
+  }
+
+  .hdr__nav {
+    display: flex;
+  }
+
+  .hdr__brand {
+    margin-right: 1.5rem;
+  }
+
+  .hdr__actions {
+    margin-left: auto;
+  }
+}
+
+@media (min-width: 1024px) {
+  .hdr__cta {
+    display: inline-flex;
+    margin-left: 0.5rem;
+  }
+}

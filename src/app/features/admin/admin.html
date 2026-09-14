@@ -1,0 +1,260 @@
+<div class="tg-container tg-page">
+  <header class="ad__head">
+    <div>
+      <span class="tg-eyebrow">Internal</span>
+      <h1>Staff console</h1>
+      <p class="tg-muted">
+        Everything here writes straight to the in-memory store. Demo only — there is no login.
+      </p>
+    </div>
+    <button mat-stroked-button (click)="resetData()">
+      <mat-icon>restart_alt</mat-icon> Reset demo data
+    </button>
+  </header>
+
+  <section class="stats" aria-label="Summary">
+    <div class="stat">
+      <span class="stat__val">{{ stats().products }}</span>
+      <span class="stat__lbl">Menu items</span>
+    </div>
+    <div class="stat">
+      <span class="stat__val">{{ stats().unavailable }}</span>
+      <span class="stat__lbl">Out of stock</span>
+    </div>
+    <div class="stat">
+      <span class="stat__val">{{ stats().orders }}</span>
+      <span class="stat__lbl">Orders</span>
+    </div>
+    <div class="stat">
+      <span class="stat__val">{{ stats().revenue | rupees }}</span>
+      <span class="stat__lbl">Revenue</span>
+    </div>
+  </section>
+
+  <mat-tab-group class="ad__tabs" mat-stretch-tabs="false">
+    <!-- ------------------------------------------------------- products -->
+    <mat-tab label="Products">
+      <div class="tab">
+        <div class="tab__bar">
+          <mat-form-field appearance="outline" subscriptSizing="dynamic" class="tab__search">
+            <mat-label>Find an item</mat-label>
+            <mat-icon matPrefix>search</mat-icon>
+            <input
+              matInput
+              type="search"
+              [ngModel]="productSearch()"
+              (ngModelChange)="productSearch.set($event)"
+            />
+          </mat-form-field>
+          <button mat-flat-button color="primary" (click)="openProductDialog(null)">
+            <mat-icon>add</mat-icon> New item
+          </button>
+        </div>
+
+        @if (layout.isHandset()) {
+          <ul class="rows">
+            @for (product of productRows(); track product.id) {
+              <li class="row">
+                <img
+                  [src]="product.imageUrl"
+                  [alt]="product.name"
+                  loading="lazy"
+                  width="48"
+                  height="48"
+                />
+                <div class="row__body">
+                  <strong>{{ product.name }}</strong>
+                  <span class="tg-muted">
+                    {{ categoryName(product.categoryId) }} · {{ product.basePrice | rupees }}
+                  </span>
+                  <span
+                    class="tg-chip"
+                    [class.tg-chip--veg]="product.isAvailable"
+                    [class.tg-chip--nonveg]="!product.isAvailable"
+                  >
+                    {{ product.isAvailable ? 'Available' : 'Hidden' }}
+                  </span>
+                </div>
+                <div class="row__acts">
+                  <button
+                    mat-icon-button
+                    [attr.aria-label]="'Edit ' + product.name"
+                    (click)="openProductDialog(product)"
+                  >
+                    <mat-icon>edit</mat-icon>
+                  </button>
+                  <button
+                    mat-icon-button
+                    [attr.aria-label]="'Delete ' + product.name"
+                    (click)="deleteProduct(product)"
+                  >
+                    <mat-icon>delete</mat-icon>
+                  </button>
+                </div>
+              </li>
+            }
+          </ul>
+        } @else {
+          <div class="tg-scroll-x">
+            <table class="tbl">
+              <caption class="tg-sr-only">
+                Menu items with price, category and availability
+              </caption>
+              <thead>
+                <tr>
+                  <th scope="col">Item</th>
+                  <th scope="col">Category</th>
+                  <th scope="col" class="num">Price</th>
+                  <th scope="col" class="col-opt">Rating</th>
+                  <th scope="col">Status</th>
+                  <th scope="col"><span class="tg-sr-only">Actions</span></th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (product of productRows(); track product.id) {
+                  <tr>
+                    <th scope="row">
+                      <span class="cell-item">
+                        <img
+                          [src]="product.imageUrl"
+                          [alt]=""
+                          loading="lazy"
+                          width="40"
+                          height="40"
+                        />
+                        <span>
+                          {{ product.name }}
+                          @if (product.isFeatured) {
+                            <mat-icon class="cell-star" aria-label="Featured">star</mat-icon>
+                          }
+                        </span>
+                      </span>
+                    </th>
+                    <td>{{ categoryName(product.categoryId) }}</td>
+                    <td class="num">{{ product.basePrice | rupees }}</td>
+                    <td class="col-opt">{{ product.rating }}</td>
+                    <td>
+                      <button
+                        class="tg-chip"
+                        type="button"
+                        [class.tg-chip--veg]="product.isAvailable"
+                        [class.tg-chip--nonveg]="!product.isAvailable"
+                        (click)="toggleAvailability(product)"
+                      >
+                        {{ product.isAvailable ? 'Available' : 'Hidden' }}
+                      </button>
+                    </td>
+                    <td class="acts">
+                      <button
+                        mat-icon-button
+                        [attr.aria-label]="'Edit ' + product.name"
+                        (click)="openProductDialog(product)"
+                      >
+                        <mat-icon>edit</mat-icon>
+                      </button>
+                      <button
+                        mat-icon-button
+                        [attr.aria-label]="'Delete ' + product.name"
+                        (click)="deleteProduct(product)"
+                      >
+                        <mat-icon>delete</mat-icon>
+                      </button>
+                    </td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        }
+
+        @if (!productRows().length) {
+          <p class="tg-muted empty">No items match that search.</p>
+        }
+      </div>
+    </mat-tab>
+
+    <!-- --------------------------------------------------------- orders -->
+    <mat-tab label="Orders">
+      <div class="tab">
+        @if (!orders().length) {
+          <p class="tg-muted empty">No orders have been placed yet.</p>
+        } @else if (layout.isHandset()) {
+          <ul class="rows">
+            @for (order of orders(); track order.id) {
+              <li class="row row--order">
+                <div class="row__body">
+                  <strong>{{ order.orderNumber }}</strong>
+                  <span class="tg-muted">
+                    {{ order.customerName }} · {{ itemCount(order) }} items ·
+                    {{ order.total | rupees }}
+                  </span>
+                  <span class="tg-muted small">{{ order.placedAt | date: 'd MMM, h:mm a' }}</span>
+                  <mat-form-field appearance="outline" subscriptSizing="dynamic" class="statusfld">
+                    <mat-label>Status</mat-label>
+                    <mat-select
+                      [ngModel]="order.status"
+                      (ngModelChange)="changeStatus(order, $event)"
+                    >
+                      @for (status of statuses; track status) {
+                        <mat-option [value]="status">{{ statusLabels[status] }}</mat-option>
+                      }
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+              </li>
+            }
+          </ul>
+        } @else {
+          <div class="tg-scroll-x">
+            <table class="tbl">
+              <caption class="tg-sr-only">
+                Orders with customer, total and status
+              </caption>
+              <thead>
+                <tr>
+                  <th scope="col">Order</th>
+                  <th scope="col">Customer</th>
+                  <th scope="col" class="col-opt">Placed</th>
+                  <th scope="col" class="num">Items</th>
+                  <th scope="col" class="num">Total</th>
+                  <th scope="col">Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (order of orders(); track order.id) {
+                  <tr>
+                    <th scope="row">{{ order.orderNumber }}</th>
+                    <td>
+                      {{ order.customerName }}
+                      <span class="tg-muted small">{{ order.phone }}</span>
+                    </td>
+                    <td class="col-opt">{{ order.placedAt | date: 'd MMM, h:mm a' }}</td>
+                    <td class="num">{{ itemCount(order) }}</td>
+                    <td class="num">{{ order.total | rupees }}</td>
+                    <td>
+                      <mat-form-field
+                        appearance="outline"
+                        subscriptSizing="dynamic"
+                        class="statusfld"
+                      >
+                        <mat-select
+                          [ngModel]="order.status"
+                          (ngModelChange)="changeStatus(order, $event)"
+                          [attr.aria-label]="'Status for ' + order.orderNumber"
+                        >
+                          @for (status of statuses; track status) {
+                            <mat-option [value]="status">{{ statusLabels[status] }}</mat-option>
+                          }
+                        </mat-select>
+                      </mat-form-field>
+                    </td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        }
+      </div>
+    </mat-tab>
+  </mat-tab-group>
+</div>

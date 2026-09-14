@@ -1,0 +1,89 @@
+<div class="tg-container tg-page">
+  <header class="menu__head">
+    <span class="tg-eyebrow">Menu</span>
+    <h1>{{ heading() }}</h1>
+    <p class="tg-muted">{{ tagline() }}</p>
+  </header>
+
+  <nav class="menu__tabs" aria-label="Menu categories">
+    <a
+      class="menu__tab"
+      [class.menu__tab--active]="activeSlug() === 'all'"
+      routerLink="/menu"
+      >Everything</a
+    >
+    @for (category of categories(); track category.id) {
+      <a
+        class="menu__tab"
+        [class.menu__tab--active]="activeSlug() === category.slug"
+        [routerLink]="['/menu', category.slug]"
+        >{{ category.name }}</a
+      >
+    }
+  </nav>
+
+  <section class="menu__filters" aria-label="Filter and sort">
+    <mat-form-field appearance="outline" class="menu__search" subscriptSizing="dynamic">
+      <mat-label>Search the menu</mat-label>
+      <mat-icon matPrefix>search</mat-icon>
+      <input
+        matInput
+        type="search"
+        [ngModel]="search()"
+        (ngModelChange)="search.set($event)"
+        placeholder="truffle, pistachio, spicy…"
+      />
+      @if (search()) {
+        <button matSuffix mat-icon-button aria-label="Clear search" (click)="search.set('')">
+          <mat-icon>close</mat-icon>
+        </button>
+      }
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="menu__sort" subscriptSizing="dynamic">
+      <mat-label>Sort by</mat-label>
+      <mat-select [ngModel]="sort()" (ngModelChange)="sort.set($event)">
+        <mat-option value="popular">Most popular</mat-option>
+        <mat-option value="rating">Highest rated</mat-option>
+        <mat-option value="price-asc">Price: low to high</mat-option>
+        <mat-option value="price-desc">Price: high to low</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <div class="menu__toggles">
+      <mat-slide-toggle [ngModel]="vegOnly()" (ngModelChange)="vegOnly.set($event)">
+        Veg only
+      </mat-slide-toggle>
+      <mat-slide-toggle [ngModel]="inStockOnly()" (ngModelChange)="inStockOnly.set($event)">
+        In stock
+      </mat-slide-toggle>
+    </div>
+  </section>
+
+  <div class="menu__meta">
+    <p class="tg-muted">
+      {{ results().length }} {{ results().length === 1 ? 'item' : 'items' }}
+    </p>
+    @if (hasFilters()) {
+      <button mat-button color="primary" (click)="clearFilters()">
+        <mat-icon>refresh</mat-icon> Reset filters
+      </button>
+    }
+  </div>
+
+  @if (results().length) {
+    <div class="tg-grid">
+      @for (product of results(); track product.id) {
+        <app-product-card [product]="product" />
+      }
+    </div>
+  } @else {
+    <app-empty-state
+      icon="search_off"
+      heading="Nothing matches that"
+      message="Try a different word, or clear the filters to see the full menu again."
+      actionLabel="Show everything"
+      actionLink="/menu"
+    />
+  }
+</div>

@@ -1,0 +1,125 @@
+<div class="tg-container tg-page">
+  <header class="cart__head">
+    <div>
+      <span class="tg-eyebrow">Almost there</span>
+      <h1>Your cart</h1>
+    </div>
+    @if (!cart.isEmpty()) {
+      <button mat-button (click)="clear()">
+        <mat-icon>delete_sweep</mat-icon> Empty cart
+      </button>
+    }
+  </header>
+
+  @if (cart.isEmpty()) {
+    <app-empty-state
+      icon="shopping_cart"
+      heading="Nothing in here yet"
+      message="Your cart is waiting on a pizza. Or a tub of pistachio. Ideally both."
+      actionLabel="Browse the menu"
+      actionLink="/menu"
+    />
+  } @else {
+    @if (cart.amountToFreeDelivery() > 0) {
+      <div class="cart__nudge" role="status">
+        <mat-icon aria-hidden="true">local_shipping</mat-icon>
+        <span>
+          Add <strong>{{ cart.amountToFreeDelivery() | rupees }}</strong> more and delivery is free.
+        </span>
+      </div>
+    }
+
+    <div class="cart__layout">
+      <ul class="cart__list">
+        @for (line of cart.lines(); track line.item.id) {
+          <li class="line">
+            <img
+              class="line__img"
+              [src]="line.product.imageUrl"
+              [alt]="line.product.name"
+              loading="lazy"
+              decoding="async"
+              width="120"
+              height="120"
+            />
+
+            <div class="line__body">
+              <div class="line__top">
+                <h3 class="line__name">
+                  <a [routerLink]="['/product', line.product.id]">{{ line.product.name }}</a>
+                </h3>
+                <button
+                  mat-icon-button
+                  class="line__remove"
+                  [attr.aria-label]="'Remove ' + line.product.name"
+                  (click)="remove(line.item.id, line.product.name)"
+                >
+                  <mat-icon>close</mat-icon>
+                </button>
+              </div>
+
+              <p class="line__opts tg-muted">
+                {{ line.size?.label }}
+                @if (line.toppings.length) {
+                  · {{ line.toppings.length }} extra{{ line.toppings.length > 1 ? 's' : '' }}
+                }
+              </p>
+
+              @if (line.toppings.length) {
+                <p class="line__toppings tg-muted">
+                  @for (topping of line.toppings; track topping.id) {
+                    <span class="tg-chip">{{ topping.name }}</span>
+                  }
+                </p>
+              }
+
+              <div class="line__foot">
+                <app-quantity-stepper
+                  [quantity]="line.item.quantity"
+                  [label]="'quantity of ' + line.product.name"
+                  (change)="cart.setQuantity(line.item.id, $event)"
+                />
+                <div class="line__price">
+                  <strong class="tg-price">{{ line.item.lineTotal | rupees }}</strong>
+                  <span class="tg-muted">{{ line.item.unitPrice | rupees }} each</span>
+                </div>
+              </div>
+            </div>
+          </li>
+        }
+      </ul>
+
+      <aside class="summary" aria-label="Order summary">
+        <h2 class="summary__title">Order summary</h2>
+        <dl class="summary__rows">
+          <div>
+            <dt>Subtotal</dt>
+            <dd>{{ cart.subtotal() | rupees }}</dd>
+          </div>
+          <div>
+            <dt>Tax (5%)</dt>
+            <dd>{{ cart.tax() | rupees }}</dd>
+          </div>
+          <div>
+            <dt>Delivery</dt>
+            <dd>
+              @if (cart.deliveryFee() === 0) {
+                <span class="summary__free">Free</span>
+              } @else {
+                {{ cart.deliveryFee() | rupees }}
+              }
+            </dd>
+          </div>
+        </dl>
+        <div class="summary__total">
+          <span>Total</span>
+          <strong class="tg-price">{{ cart.total() | rupees }}</strong>
+        </div>
+        <a mat-flat-button color="primary" class="summary__cta" routerLink="/checkout">
+          Checkout · {{ cart.count() }} item{{ cart.count() === 1 ? '' : 's' }}
+        </a>
+        <a mat-button class="summary__cta" routerLink="/menu">Keep browsing</a>
+      </aside>
+    </div>
+  }
+</div>

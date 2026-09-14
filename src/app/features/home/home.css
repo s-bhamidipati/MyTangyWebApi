@@ -1,0 +1,272 @@
+/* ------------------------------------------------------------------ hero */
+
+.hero {
+  background:
+    radial-gradient(120% 90% at 85% 0%, var(--tg-tomato-soft) 0%, transparent 60%),
+    var(--tg-cream);
+  border-bottom: 1px solid var(--tg-line);
+}
+
+.hero__inner {
+  display: grid;
+  gap: clamp(2rem, 1rem + 4vw, 3.5rem);
+  align-items: center;
+  padding-block: clamp(2.5rem, 1.5rem + 5vw, 5rem);
+}
+
+.hero__copy h1 {
+  margin-bottom: 0.35em;
+}
+
+.hero__copy > p {
+  max-width: 52ch;
+  font-size: clamp(1rem, 0.95rem + 0.3vw, 1.12rem);
+  color: var(--tg-ink-muted);
+}
+
+.hero__cta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-block: 1.5rem;
+}
+
+.hero__cta a {
+  flex: 1 1 auto;
+  min-width: 165px;
+}
+
+.hero__stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.25rem 2rem;
+  margin: 0;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--tg-line);
+}
+
+.hero__stats dt {
+  font-family: var(--tg-font-display);
+  font-size: 1.45rem;
+  font-weight: 700;
+  color: var(--tg-tomato);
+}
+
+.hero__stats dd {
+  margin: 0;
+  font-size: 0.8rem;
+  color: var(--tg-ink-muted);
+}
+
+.hero__art {
+  position: relative;
+  order: -1;
+}
+
+.hero__art img {
+  width: 100%;
+  aspect-ratio: 1;
+  object-fit: cover;
+  border-radius: var(--tg-radius-lg);
+  box-shadow: var(--tg-shadow-lg);
+}
+
+.hero__badge {
+  position: absolute;
+  left: 1rem;
+  bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.6rem 0.9rem;
+  border-radius: var(--tg-radius);
+  background: var(--tg-overlay);
+  box-shadow: var(--tg-shadow);
+  backdrop-filter: blur(6px);
+}
+
+.hero__badge mat-icon {
+  color: var(--tg-tomato);
+}
+
+.hero__badge strong {
+  display: block;
+  font-size: 0.85rem;
+  line-height: 1.2;
+}
+
+.hero__badge span {
+  font-size: 0.72rem;
+  color: var(--tg-ink-muted);
+}
+
+/* ------------------------------------------------------------ categories */
+
+.cats {
+  display: grid;
+  gap: clamp(1rem, 0.5rem + 2vw, 2rem);
+}
+
+.cat {
+  position: relative;
+  display: block;
+  overflow: hidden;
+  border-radius: var(--tg-radius-lg);
+  min-height: 260px;
+  box-shadow: var(--tg-shadow);
+  transition: transform 0.25s ease;
+}
+
+.cat:hover {
+  transform: translateY(-4px);
+}
+
+.cat img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+.cat:hover img {
+  transform: scale(1.06);
+}
+
+.cat__body {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: end;
+  min-height: 260px;
+  padding: clamp(1.25rem, 1rem + 1.5vw, 2rem);
+  color: #fff;
+  background: linear-gradient(to top, rgba(20, 16, 14, 0.88) 12%, rgba(20, 16, 14, 0) 72%);
+}
+
+.cat__body h3 {
+  margin: 0 0 0.25rem;
+  color: #fff;
+}
+
+.cat__body p {
+  margin: 0 0 0.75rem;
+  max-width: 40ch;
+  color: rgba(255, 255, 255, 0.82);
+  font-size: 0.9rem;
+}
+
+.cat__link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-weight: 700;
+  font-size: 0.88rem;
+  color: #f5a524;
+}
+
+.cat__link mat-icon {
+  font-size: 18px;
+  width: 18px;
+  height: 18px;
+}
+
+/* ----------------------------------------------------------------- perks */
+
+.perks {
+  background: var(--tg-surface);
+  border-block: 1px solid var(--tg-line);
+  padding-block: clamp(2rem, 1.5rem + 2vw, 3rem);
+}
+
+.perks__grid {
+  display: grid;
+  gap: 1.5rem;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr));
+}
+
+.perk mat-icon {
+  color: var(--tg-tomato);
+  margin-bottom: 0.4rem;
+}
+
+.perk h4 {
+  margin: 0 0 0.2rem;
+  font-family: var(--tg-font);
+  font-size: 0.98rem;
+}
+
+.perk p {
+  margin: 0;
+  font-size: 0.86rem;
+  color: var(--tg-ink-muted);
+}
+
+/* ----------------------------------------------------------------- promo */
+
+/* Fixed brand colours: this banner reads as a poster in both themes. */
+.promo {
+  display: grid;
+  gap: 1.5rem;
+  align-items: center;
+  padding: clamp(1.75rem, 1.25rem + 3vw, 3.5rem);
+  margin-bottom: 1rem;
+  border-radius: var(--tg-radius-lg);
+  background: linear-gradient(135deg, #e23744 0%, #8e1d3c 100%);
+  color: #fff;
+  overflow: hidden;
+}
+
+.promo__eyebrow {
+  color: #f5a524;
+}
+
+.promo h2 {
+  color: #fff;
+  margin-bottom: 0.4em;
+}
+
+.promo p {
+  max-width: 48ch;
+  color: rgba(255, 255, 255, 0.88);
+  margin-bottom: 1.35rem;
+}
+
+.promo a {
+  background: #fff !important;
+  color: #b81f2c !important;
+}
+
+.promo__art {
+  font-size: clamp(3rem, 2rem + 8vw, 6rem);
+  text-align: center;
+  line-height: 1;
+}
+
+/* ----------------------------------------------------------- breakpoints */
+
+@media (min-width: 700px) {
+  .cats {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .hero__inner {
+    grid-template-columns: 1.05fr 0.95fr;
+  }
+
+  .hero__art {
+    order: 0;
+  }
+
+  .hero__cta a {
+    flex: 0 0 auto;
+  }
+
+  .promo {
+    grid-template-columns: 1fr auto;
+    gap: 3rem;
+  }
+}

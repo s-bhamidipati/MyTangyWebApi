@@ -1,0 +1,150 @@
+<div class="tg-container tg-page">
+  <header class="co__head">
+    <span class="tg-eyebrow">Last step</span>
+    <h1>Checkout</h1>
+  </header>
+
+  @if (cart.isEmpty()) {
+    <app-empty-state
+      icon="remove_shopping_cart"
+      heading="There is nothing to check out"
+      message="Add something to your cart first and then come back here."
+      actionLabel="Browse the menu"
+      actionLink="/menu"
+    />
+  } @else {
+    <form class="co__layout" [formGroup]="form" (ngSubmit)="submit()" novalidate>
+      <div class="co__form">
+        <section class="co__card">
+          <h2>Where is this going?</h2>
+
+          <div class="co__grid">
+            <mat-form-field appearance="outline">
+              <mat-label>Full name</mat-label>
+              <input matInput formControlName="customerName" autocomplete="name" />
+              @if (form.controls.customerName.hasError('required')) {
+                <mat-error>We need a name for the order.</mat-error>
+              } @else if (form.controls.customerName.hasError('minlength')) {
+                <mat-error>That looks a bit short.</mat-error>
+              }
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>Phone number</mat-label>
+              <input matInput formControlName="phone" inputmode="numeric" autocomplete="tel" />
+              <mat-hint>10 digits, no spaces</mat-hint>
+              @if (form.controls.phone.hasError('required')) {
+                <mat-error>The driver needs a number to call.</mat-error>
+              } @else if (form.controls.phone.hasError('pattern')) {
+                <mat-error>Enter exactly 10 digits.</mat-error>
+              }
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="co__span">
+              <mat-label>Email</mat-label>
+              <input matInput type="email" formControlName="email" autocomplete="email" />
+              @if (form.controls.email.hasError('required')) {
+                <mat-error>An email is required for the receipt.</mat-error>
+              } @else if (form.controls.email.hasError('email')) {
+                <mat-error>That does not look like an email address.</mat-error>
+              }
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="co__span">
+              <mat-label>Delivery address</mat-label>
+              <textarea
+                matInput
+                rows="3"
+                formControlName="address"
+                autocomplete="street-address"
+              ></textarea>
+              @if (form.controls.address.hasError('required')) {
+                <mat-error>We cannot deliver without an address.</mat-error>
+              } @else if (form.controls.address.hasError('minlength')) {
+                <mat-error>Add a little more detail, please.</mat-error>
+              }
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="co__span">
+              <mat-label>Notes for the kitchen (optional)</mat-label>
+              <textarea matInput rows="2" formControlName="notes"></textarea>
+            </mat-form-field>
+          </div>
+        </section>
+
+        <section class="co__card">
+          <h2>How are you paying?</h2>
+          <mat-radio-group class="co__pay" formControlName="paymentMethod">
+            @for (method of paymentMethods; track method.value) {
+              <mat-radio-button class="co__pay-opt" [value]="method.value">
+                <span class="co__pay-row">
+                  <mat-icon aria-hidden="true">{{ method.icon }}</mat-icon>
+                  <span>{{ method.label }}</span>
+                </span>
+              </mat-radio-button>
+            }
+          </mat-radio-group>
+          <p class="co__demo tg-muted">
+            <mat-icon aria-hidden="true">info</mat-icon>
+            This is a demo storefront — no payment is taken and no food is dispatched.
+          </p>
+        </section>
+      </div>
+
+      <aside class="summary" aria-label="Order summary">
+        <h2 class="summary__title">Order summary</h2>
+
+        <ul class="summary__items">
+          @for (line of cart.lines(); track line.item.id) {
+            <li>
+              <span class="summary__qty">{{ line.item.quantity }}×</span>
+              <span class="summary__name">
+                {{ line.product.name }}
+                <small class="tg-muted">{{ line.size?.label }}</small>
+              </span>
+              <span class="tg-price">{{ line.item.lineTotal | rupees }}</span>
+            </li>
+          }
+        </ul>
+
+        <dl class="summary__rows">
+          <div>
+            <dt>Subtotal</dt>
+            <dd>{{ cart.subtotal() | rupees }}</dd>
+          </div>
+          <div>
+            <dt>Tax (5%)</dt>
+            <dd>{{ cart.tax() | rupees }}</dd>
+          </div>
+          <div>
+            <dt>Delivery</dt>
+            <dd>
+              @if (cart.deliveryFee() === 0) {
+                <span class="summary__free">Free</span>
+              } @else {
+                {{ cart.deliveryFee() | rupees }}
+              }
+            </dd>
+          </div>
+        </dl>
+
+        <div class="summary__total">
+          <span>Total</span>
+          <strong class="tg-price">{{ cart.total() | rupees }}</strong>
+        </div>
+
+        <button
+          mat-flat-button
+          color="primary"
+          type="submit"
+          class="summary__cta"
+          [disabled]="submitting()"
+        >
+          <mat-icon>check_circle</mat-icon>
+          Place order
+        </button>
+        <a mat-button class="summary__cta" routerLink="/cart">Back to cart</a>
+      </aside>
+    </form>
+  }
+</div>

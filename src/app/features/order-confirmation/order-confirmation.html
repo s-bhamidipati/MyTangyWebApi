@@ -1,0 +1,114 @@
+@if (order(); as o) {
+  <div class="tg-container tg-page">
+    <section class="hero">
+      <div class="hero__tick" aria-hidden="true">
+        <mat-icon>check</mat-icon>
+      </div>
+      <h1>Order {{ o.orderNumber }} is in</h1>
+      <p class="tg-muted">
+        Thanks {{ o.customerName.split(' ')[0] }} — the kitchen has it. A receipt is on its way to
+        {{ o.email }}.
+      </p>
+    </section>
+
+    <section class="track" aria-label="Order progress">
+      @if (o.status === 'cancelled') {
+        <div class="track__cancelled">
+          <mat-icon aria-hidden="true">cancel</mat-icon>
+          <span>This order was cancelled.</span>
+        </div>
+      } @else {
+        <ol class="steps">
+          @for (status of statusFlow; track status; let i = $index) {
+            <li class="step" [class.step--done]="i <= currentStep()">
+              <span class="step__dot" aria-hidden="true">
+                @if (i <= currentStep()) {
+                  <mat-icon>check</mat-icon>
+                }
+              </span>
+              <span class="step__label">{{ statusLabels[status] }}</span>
+            </li>
+          }
+        </ol>
+      }
+    </section>
+
+    <div class="detail">
+      <section class="panel">
+        <h2>What you ordered</h2>
+        <ul class="items">
+          @for (item of items(); track item.id) {
+            <li class="item">
+              <img
+                [src]="item.productImageUrl"
+                [alt]="item.productName"
+                loading="lazy"
+                decoding="async"
+                width="64"
+                height="64"
+              />
+              <div class="item__body">
+                <strong>{{ item.productName }}</strong>
+                <span class="tg-muted">
+                  {{ item.sizeLabel }} · Qty {{ item.quantity }}
+                  @if (item.toppingNames.length) {
+                    · {{ item.toppingNames.join(', ') }}
+                  }
+                </span>
+              </div>
+              <span class="tg-price">{{ item.lineTotal | rupees }}</span>
+            </li>
+          }
+        </ul>
+
+        <dl class="totals">
+          <div>
+            <dt>Subtotal</dt>
+            <dd>{{ o.subtotal | rupees }}</dd>
+          </div>
+          <div>
+            <dt>Tax</dt>
+            <dd>{{ o.tax | rupees }}</dd>
+          </div>
+          <div>
+            <dt>Delivery</dt>
+            <dd>{{ o.deliveryFee === 0 ? 'Free' : (o.deliveryFee | rupees) }}</dd>
+          </div>
+          <div class="totals__grand">
+            <dt>Total paid</dt>
+            <dd>{{ o.total | rupees }}</dd>
+          </div>
+        </dl>
+      </section>
+
+      <aside class="panel">
+        <h2>Delivery details</h2>
+        <dl class="meta">
+          <dt>Placed</dt>
+          <dd>{{ o.placedAt | date: 'medium' }}</dd>
+          <dt>Deliver to</dt>
+          <dd>{{ o.address }}</dd>
+          <dt>Contact</dt>
+          <dd>{{ o.phone }}</dd>
+          <dt>Payment</dt>
+          <dd>{{ paymentLabels[o.paymentMethod] }}</dd>
+          @if (o.notes) {
+            <dt>Notes</dt>
+            <dd>{{ o.notes }}</dd>
+          }
+        </dl>
+
+        <div class="actions">
+          <a mat-flat-button color="primary" routerLink="/menu">Order something else</a>
+          <a mat-stroked-button routerLink="/orders">All my orders</a>
+        </div>
+      </aside>
+    </div>
+  </div>
+} @else {
+  <div class="tg-container tg-page missing">
+    <h1>Order not found</h1>
+    <p class="tg-muted">We could not find an order with that reference.</p>
+    <a mat-flat-button color="primary" routerLink="/orders">View your orders</a>
+  </div>
+}
